@@ -1,0 +1,9 @@
+google-genai
+langchain
+langchain-openai
+streamlit==1.36.0
+pandas
+numpy
+chromadb
+python-dotenv
+tiktoken
