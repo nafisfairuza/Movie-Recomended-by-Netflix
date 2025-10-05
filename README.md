@@ -1,7 +1,7 @@
 # Movie and TV Show Recommender RAG Chatbot
 This is a Retrieval-Augmented Generation (RAG) chatbot built using Streamlit and LangChain, designed to provide movie and TV show recommendations based on a custom dataset derived from a single Kaggle source (merged_data.csv).
 
-The RAG architecture ensures that recommendations are factual and grounded in the provided data, enhanced by the reasoning capabilities of an OpenAI Large Language Model (LLM).
+The RAG architecture ensures that recommendations are factual and **grounded in the provided data**, enhanced by the reasoning capabilities of the **Gemini 2.5 Flash** Large Language Model (LLM)
 
 # 1. Dataset Source
 The dataset used in this project comes from Kaggle. You can access it here: 🔗 https://www.kaggle.com/datasets/mirajshah07/netflix-dataset
@@ -11,7 +11,7 @@ The dataset used in this project comes from Kaggle. You can access it here: 🔗
 
 - Data Source: merged_data.csv (Contains information about movies/TV shows).
 
-- LLM (Online Deployment): OpenAI's GPT-3.5 Turbo (Requires an API Key).
+- LLM (Online Deployment): **Google Gemini 2.5 Flash** (Used for free via `langchain-google-genai`).
 
 - Vector Store: ChromaDB (chroma_db/ folder) for storing vectorized movie data.
 
@@ -21,7 +21,7 @@ The dataset used in this project comes from Kaggle. You can access it here: 🔗
 - Prerequisites
 1. Python 3.8+ installed.
 
-2. OpenAI API Key (for the online version).
+2. **Gemini API Key** (for the online version).
 
 3. Git installed (optional, for cloning).
 
@@ -41,9 +41,9 @@ python -m venv venv
 pip install -r requirements.txt
 
 4. Configure API Key:
-Create a file named .env in the root directory and add your key:
+Create a file named `.env` in the root directory and add your key:
 
-OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    GEMINI_API_KEY="AIzaSyAxlJ..."
 
 Note: The .env file is excluded from GitHub via the .gitignore.
 
@@ -64,12 +64,11 @@ This application is ready to be deployed on Streamlit Cloud, provided that the c
 Configuration Steps
 Go to Streamlit Cloud and select this repository.
 
-In the deployment settings, you must provide your OpenAI API Key as a secret.
+In the deployment settings, you must provide your **Gemini API Key** as a secret.
 
 Add the key/value pair in the Streamlit Cloud secrets configuration:
 
-Key: OPENAI_API_KEY
+KEY MUST BE NAMED EXACTLY LIKE THIS
+    GEMINI_API_KEY = "AIzaSyAxlJ..." 
 
-Value: sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (Your actual API Key)
-
-The app will then load the committed chroma_db folder, install the dependencies, and run using the online OpenAI model.
+The app will then load the committed `chroma_db` folder, install the dependencies, and run using the online **Gemini 2.5 Flash** model.
