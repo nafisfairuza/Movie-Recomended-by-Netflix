@@ -3,7 +3,8 @@ This is a Retrieval-Augmented Generation (RAG) chatbot built using Streamlit and
 
 The RAG architecture ensures that recommendations are factual and grounded in the provided data, enhanced by the reasoning capabilities of an OpenAI Large Language Model (LLM).
 
-# 1. Dataset Source The dataset used in this project comes from Kaggle. You can access it here: 🔗 https://www.kaggle.com/datasets/mirajshah07/netflix-dataset
+# 1. Dataset Source
+The dataset used in this project comes from Kaggle. You can access it here: 🔗 https://www.kaggle.com/datasets/mirajshah07/netflix-dataset
   
 # 2. Project Architecture & Components
 - Framework: Streamlit for the interactive web application interface.
