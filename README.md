@@ -19,40 +19,40 @@ The dataset used in this project comes from Kaggle. You can access it here: 🔗
 
 # 3. How to Run Locally
 - Prerequisites
-Python 3.8+ installed.
+1. Python 3.8+ installed.
 
-OpenAI API Key (for the online version).
+2. OpenAI API Key (for the online version).
 
-Git installed (optional, for cloning).
+3. Git installed (optional, for cloning).
 
 - Setup
-Clone the Repository:
+1. Clone the Repository:
 
 git clone [https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git](https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git)
 cd Movie-Recommender-by-Netflix
 
-Create and Activate Virtual Environment:
+2. Create and Activate Virtual Environment:
 
 python -m venv venv
 .\venv\Scripts\activate
 
-Install Dependencies:
+3. Install Dependencies:
 
 pip install -r requirements.txt
 
-Configure API Key:
+4. Configure API Key:
 Create a file named .env in the root directory and add your key:
 
 OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 Note: The .env file is excluded from GitHub via the .gitignore.
 
-Build the Vector Store (Initial Setup)
+5. Build the Vector Store (Initial Setup)
 This step processes merged_data.csv and creates the chroma_db/ folder.
 
 python create_vectorstore.py
 
-Run the Streamlit App:
+6. Run the Streamlit App:
 
 streamlit run app.py
 
