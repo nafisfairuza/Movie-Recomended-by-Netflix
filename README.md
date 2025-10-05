@@ -17,7 +17,7 @@ Python 3.8+ installed.
 OpenAI API Key (for the online version).
 Git installed (optional, for cloning).
 
--Setup
+- Setup
  * Clone the Repository:
 git clone [https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git](https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git)
 cd Movie-Recommender-by-Netflix
