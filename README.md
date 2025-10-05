@@ -3,28 +3,28 @@ This is a Retrieval-Augmented Generation (RAG) chatbot built using Streamlit and
 
 The RAG architecture ensures that recommendations are factual and grounded in the provided data, enhanced by the reasoning capabilities of an OpenAI Large Language Model (LLM).
 
-1. Dataset Source The dataset used in this project comes from Kaggle. You can access it here: 🔗 https://www.kaggle.com/datasets/mirajshah07/netflix-dataset
+# 1. Dataset Source The dataset used in this project comes from Kaggle. You can access it here: 🔗 https://www.kaggle.com/datasets/mirajshah07/netflix-dataset
   
-2. Project Architecture & Components
-Framework: Streamlit for the interactive web application interface.
+# 2. Project Architecture & Components
+- Framework: Streamlit for the interactive web application interface.
 
-Data Source: merged_data.csv (Contains information about movies/TV shows).
+- Data Source: merged_data.csv (Contains information about movies/TV shows).
 
-LLM (Online Deployment): OpenAI's GPT-3.5 Turbo (Requires an API Key).
+- LLM (Online Deployment): OpenAI's GPT-3.5 Turbo (Requires an API Key).
 
-Vector Store: ChromaDB (chroma_db/ folder) for storing vectorized movie data.
+- Vector Store: ChromaDB (chroma_db/ folder) for storing vectorized movie data.
 
-Embeddings: HuggingFace's all-MiniLM-L6-v2 (local embeddings used for indexing).
+- Embeddings: HuggingFace's all-MiniLM-L6-v2 (local embeddings used for indexing).
 
-3. How to Run Locally
-Prerequisites
+# 3. How to Run Locally
+- Prerequisites
 Python 3.8+ installed.
 
 OpenAI API Key (for the online version).
 
 Git installed (optional, for cloning).
 
-Setup
+- Setup
 Clone the Repository:
 
 git clone [https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git](https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git)
@@ -57,7 +57,7 @@ streamlit run app.py
 
 The application will open in your web browser.
 
-☁️ Deployment on Streamlit Cloud
+# 4. Deployment on Streamlit Cloud
 This application is ready to be deployed on Streamlit Cloud, provided that the chroma_db/ folder is committed to this repository.
 
 Configuration Steps
