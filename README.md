@@ -18,7 +18,7 @@ OpenAI API Key (for the online version).
 Git installed (optional, for cloning).
 
 - Setup
- * Clone the Repository:
+* Clone the Repository:
 git clone [https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git](https://github.com/nafisfairuza/Movie-Recommender-by-Netflix.git)
 cd Movie-Recommender-by-Netflix
 * Create and Activate Virtual Environment:
