@@ -2,21 +2,22 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings # <<< EMBEDDING LOKAL (GRATIS)
-from langchain_openai import ChatOpenAI # <<< CHAT MODEL API KEY
+from langchain_community.embeddings import HuggingFaceEmbeddings # Embeddings LOKAL (GRATIS)
+from langchain_google_genai import ChatGoogleGenerativeAI # Menggunakan Gemini LLM
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts import PromptTemplate
+from langchain.memory import ConversationBufferMemory # Tambahkan memory
 import time 
 
 # --- 1. Konfigurasi Awal ---
-load_dotenv()
+load_dotenv() 
 
-api_key_value = os.getenv("OPENAI_API_KEY")
-
-if not api_key_value:
-    st.error("OPENAI_API_KEY tidak ditemukan di file .env. Pastikan Anda sudah memasukkan kunci API baru.")
+try:
+    api_key_value = st.secrets["GEMINI_API_KEY"]
+except KeyError:
+    st.error("Error: Kunci API Gemini ('GEMINI_API_KEY') tidak ditemukan di Streamlit Secrets.")
     st.stop()
-
+    
 CHROMA_PATH = "./chroma_db"
 
 # --- 2. Inisialisasi Vector Store dan Model ---
@@ -34,10 +35,8 @@ def load_vector_store():
         st.error(f"Gagal memuat model Embedding lokal. Error: {e}")
         return None
 
-    # 2b. Cek apakah Vector Store sudah ada
-    is_persisted = os.path.exists(CHROMA_PATH) and os.path.isdir(CHROMA_PATH) and len(os.listdir(CHROMA_PATH)) > 1
-    
-    if is_persisted:
+    # 2b. Muat Vector Store yang sudah ada
+    if os.path.exists(CHROMA_PATH) and os.path.isdir(CHROMA_PATH):
         try:
             vectorstore = Chroma(
                 persist_directory=CHROMA_PATH,
@@ -48,7 +47,7 @@ def load_vector_store():
             st.error(f"Gagal memuat Vector Store: {e}.")
             return None
     
-    st.error("Vector Store belum tersedia. Silakan jalankan 'python create_vectorstore.py' di terminal terlebih dahulu.")
+    st.error("Vector Store belum tersedia. Pastikan folder 'chroma_db' sudah di-push.")
     return None
 
 # --- 3. Inisialisasi RAG Chain ---
@@ -71,15 +70,23 @@ def get_rag_chain(_vectorstore):
         template=template, input_variables=["context", "question"]
     )
     
-    # Inisialisasi Chat Model OpenAI
-    llm = ChatOpenAI(
-        model="gpt-3.5-turbo", 
+    # PENTING: Inisialisasi Chat Model Gemini
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash", # Menggunakan model Gemini yang cepat dan gratis
+        google_api_key=api_key_value, # Menggunakan kunci dari Streamlit Secrets
         temperature=0.3,
+    )
+    
+    # Inisialisasi Memory untuk percakapan
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        return_messages=True
     )
     
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=_vectorstore.as_retriever(search_kwargs={"k": 3}), 
+        memory=memory, # Tambahkan memory
         combine_docs_chain_kwargs={"prompt": PROMPT},
         return_source_documents=False 
     )
@@ -98,12 +105,14 @@ def main():
     if vectorstore is None:
         return 
 
-    # Inisialisasi RAG Chain
-    qa_chain = get_rag_chain(vectorstore) 
-    
-    # Inisialisasi session state untuk menyimpan riwayat chat
+    # Inisialisasi RAG Chain dan simpan di session state
+    if "qa_chain" not in st.session_state or st.session_state.qa_chain is None:
+         st.session_state.qa_chain = get_rag_chain(vectorstore)
+
+    # Inisialisasi session state untuk menyimpan riwayat chat (untuk tampilan UI)
     if "messages" not in st.session_state:
         st.session_state.messages = [{"role": "assistant", "content": "Halo! Saya Roger, asisten rekomendasi film terbaik. Apa yang ingin kamu cari?"}]
+    # Riwayat chat untuk LangChain (pasangan pertanyaan/jawaban)
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
         
@@ -114,6 +123,7 @@ def main():
 
     # Input dari pengguna
     if prompt := st.chat_input("Tanyakan rekomendasi film atau informasi IMDB..."):
+        # Tambahkan prompt pengguna ke UI
         st.session_state.messages.append({"role": "user", "content": prompt})
         
         with st.chat_message("user"):
@@ -123,20 +133,19 @@ def main():
         with st.chat_message("assistant"):
             with st.spinner("Wait a second, jangan pergi dulu..."):
                 try:
-                    result = qa_chain.invoke(
-                        {"question": prompt, "chat_history": st.session_state.chat_history}
+                    result = st.session_state.qa_chain.invoke(
+                        {"question": prompt}
                     )
                     response = result["answer"]
                     
-                    st.session_state.chat_history.append((prompt, response))
-                    
                 except Exception as e:
-                    # Error akan muncul di sini jika API Key yang baru masih belum berkuota
-                    response = f"Terjadi kesalahan saat memproses permintaan LLM. (Cek Kuota API OpenAI Anda). Error: {e}"
+                    # Menangkap error dari Gemini (misalnya API Key salah)
+                    response = f"Terjadi kesalahan saat memproses permintaan LLM. (Cek Kunci API Gemini Anda). Error: {e}"
                     print(f"RAG Chain Error: {e}") 
 
             st.markdown(response)
             
+            # Tambahkan respons asisten ke UI
             st.session_state.messages.append({"role": "assistant", "content": response})
 
 if __name__ == "__main__":
