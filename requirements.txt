@@ -1,9 +1,10 @@
-google-genai
-langchain
-langchain-openai
 streamlit==1.36.0
 pandas
 numpy
+langchain
+langchain-openai
+langchain-community 
+sentence-transformers 
 chromadb
 python-dotenv
 tiktoken
