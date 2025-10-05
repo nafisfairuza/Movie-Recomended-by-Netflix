@@ -42,7 +42,6 @@ def create_vector_store():
     # 3. Membuat Vector Store
     print(f"Membuat Vector Store dan menyimpan ke {CHROMA_PATH}. Ini mungkin memakan waktu...")
     try:
-        # Hapus folder lama untuk memastikan kebaruan data
         if os.path.exists(CHROMA_PATH):
             shutil.rmtree(CHROMA_PATH)
             print(f"Folder lama {CHROMA_PATH} berhasil dibersihkan.")
